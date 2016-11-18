@@ -1,5 +1,6 @@
 #!/bin/sh
 
+
 SERVERS="192.168.37.134 192.168.37.136 192.168.37.137"
 PASSWORD=1
 
@@ -42,6 +43,7 @@ HERE
 
 function get_pub_key() {
 	expect << GETKEY
+	spawn echo " ------------------ copy ssh key from $1 to $2 "
 	spawn ssh root@$1 ssh-copy-id $2
 	while 1 {
 		expect {
@@ -57,7 +59,7 @@ function get_pub_key() {
 		}
 	}
 GETKEY
-}
+}	
 
 
 function put_pub_key() {
@@ -82,17 +84,19 @@ SE
 function generate_ssh_key() {
 	for SERVER in $SERVERS
 	do
-		auto_gen_ssh_key $SERVER 1		
-		get_pub_key $SERVER $BASE_SERVER 1
+		auto_gen_ssh_key $SERVER 1
 	done
-	
+
+	echo '-----------------------------------------------------'
+
 	for SERVER in $SERVERS
 	do
+		get_pub_key $SERVER $BASE_SERVER 1 
+		echo " ----- put $BASE_SERVER --> $SERVER "
 		put_pub_key $BASE_SERVER $SERVER 1
 	done
 }
 
 
 generate_ssh_key
-
 
