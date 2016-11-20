@@ -33,6 +33,8 @@ su - hadoop << MKDIR
 	exit 0;
 MKDIR
 
+#sed -e "s/dataDir=/dataDir=${DATA_DIR}/g" ${ZK_DIR}/conf/zoo.tmp.cfg > ${ZK_DIR}/conf/zoo.cfg
+#sed "s/dataDir=/dataDir=${DATA_DIR}/g" ${ZK_DIR}/conf/zoo.tmp.cfg > ${ZK_DIR}/conf/zoo.cfg
 cat > ${ZK_DIR}/conf/zoo.cfg << CFG
 	dataDir=${DATA_DIR}
 	dataLogDir=${LOG_DIR}
@@ -55,5 +57,30 @@ cat > /etc/profile.d/zookeeper.sh << HE
 	export ZOOKEEPER_HOME=${ZK_DIR}
 	export PATH=$PATH:$ZOOKEEPER_HOME/bin:$ZOOKEEPER_HOME/conf
 HE
+
+ips=`ip addr | sed -n '/inet /{s/^.*inet \([0-9.]\+\).*$/\1/;p}'`
+echo ${ips}
+
+for one_ip in $ips
+do
+	ret=$(echo ${SERVERS1} | grep "${one_ip}")
+	if [[ "${ret}" != "" ]];then
+		idx=0
+		for SERVER in ${SERVERS1} 
+		do
+			echo "--- ${SERVER} ==========================="
+			let idx+=1
+			if [[ ${one_ip} == ${SERVER} ]];then
+				echo "++++++++******* ====== ${SERVER} in ${SERVERS1}"
+				echo "*************** ===== ${idx} "
+				cat > ${DATA_DIR}/myid << MYID
+${idx}
+MYID
+				break;			
+			fi
+		done
+		break;
+	fi	
+done
 
 source /etc/profile
