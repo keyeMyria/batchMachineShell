@@ -3,7 +3,6 @@
 
 source $(pwd)/server.conf
 
-BASE_SERVER=192.168.37.134
 
 shutdown_one() {
 	expect << HERE

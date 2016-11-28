@@ -1,8 +1,14 @@
 #!/bin/sh
 
-if [ $# != 2 ]; then
-	echo "USAGE : $0 <username> <password>";
-	echo "e.g.:$0 hadoop 123456" 
+if [ `id -u` -ne 0 ];then
+	echo "su $0 <username> <password> <grouop>"
+	exit 1;
+fi
+
+
+if [ $# != 3 ]; then
+	echo "USAGE : $0 <username> <password> <grouop>";
+	echo "e.g.:$0 hadoop 123456 hadoop" 
 	exit 1;
 fi
 
@@ -16,7 +22,7 @@ source $(pwd)/server.conf
 
 function auto_add_user(){
 	expect << ADD
-	spawn ssh root@$1 "useradd $3; passwd $3";
+	spawn ssh root@$1 "groupadd $5; useradd -g $5 $3; passwd $3";
 	while 1 {
 		expect {
 			"*(yes/no)*" {
@@ -40,9 +46,9 @@ add_user() {
 	for SERVER in ${SERVERS1}
 	do
 		echo "--- begin to add user $1 with password $2 on $SERVER "
-		auto_add_user $SERVER ${COMM_PASSWD} $1 $2
+		auto_add_user $SERVER ${COMM_PASSWD} $1 $2 $3
 		echo "--- end add user $1 with password $2 on $SERVER \\r"
 	done
 }
 
-add_user $1 $2
+add_user $1 $2 $3

@@ -16,6 +16,5 @@ do
 	scp $1 root@$SERVER:/root/install_dir/
 	scp server.conf root@$SERVER:/root/install_dir/	
 	echo " ---------- $SERVER install $1 "
-	ssh root@$SERVER " sh /root/install_dir/$1 "
+	ssh root@$SERVER "cd /root/install_dir; sh /root/install_dir/$1; "
 done
-

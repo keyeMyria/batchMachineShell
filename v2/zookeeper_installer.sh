@@ -5,9 +5,9 @@ echo "********************************** $0 "
 
 ZK_VERSION='3.4.9'
 
-DATA_DIR="/home/hadoop/zookeeper/data"
-LOG_DIR="/home/hadoop/zookeeper/logs"
-ZK_DIR="/opt/zookeeper"
+DATA_DIR="${APP_DIR}/zookeeper/data"
+LOG_DIR="${APP_DIR}/zookeeper/logs"
+ZK_DIR="${APP_DIR}/zookeeper"
 
 echo "------ copy tar.gz from server ${BASE_SERVER}"
 
@@ -19,7 +19,7 @@ if [ -e "${ZK_DIR}-${ZK_VERSION}" ];then
 fi
 if [ -e "${ZK_DIR}" ];then
 	echo "++++++++++++++ "
-	rm -f /opt/zookeeper
+	rm -f ${ZK_DIR}
 fi
 
 tar -zxf /root/install_dir/zookeeper-${ZK_VERSION}.tar.gz -C /opt/

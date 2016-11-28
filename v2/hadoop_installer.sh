@@ -5,11 +5,11 @@ echo "********************************** $0 "
 
 HDP_VERSION='2.6.5'
 
-HDP_DIR="/usr/local/hadoop"
+HDP_DIR="${APP_DIR}/hadoop"
 
-echo "------ copy tar.gz from server ${BASE_SERVER}"
+echo "------ copy tar.gz from server ${BASE_IP}"
 
-scp root@${BASE_SERVER}:/root/software/hadoop-${HDP_VERSION}.tar.gz /root/install_dir/
+scp root@${BASE_IP}:/root/software/hadoop-${HDP_VERSION}.tar.gz /root/install_dir/
 mkdir -p /opt
 if [ -e "${HDP_DIR}-${HDP_VERSION}" ];then
 	echo "--- ${HDP_DIR}-${HDP_VERSION} exist "
