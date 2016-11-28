@@ -13,15 +13,27 @@ source $(pwd)/server.conf
 # $3: username to be added
 # $4: password for added useranme
 #
-auto_add_user() {
-	expect -c "set timeout -1; 
-		spawn ssh root@$1 \" useradd $3; passwd $3 $4;exit;\";
+
+function auto_add_user(){
+	expect << ADD
+	spawn ssh root@$1 "useradd $3; passwd $3";
+	while 1 {
 		expect {
-			*(yes/no)* {send -- yes\r;exp_continue;}	
-			*assword:* {send -- \"$2\r\"; exp_continue;}
-			eof    {exit 0;}
-		
-		}";
+			"*(yes/no)*" {
+				send "yes\n"
+			}
+			"*assword*" {
+				send "$2\n";
+			}
+			"*ew password*" {
+				send "$4\n"
+			}
+			eof {
+				exit;
+			}
+		}
+	}
+ADD
 }
 
 add_user() {
