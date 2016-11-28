@@ -40,7 +40,7 @@ HERE
 function get_pub_key() {
 	expect << GETKEY
 	spawn echo " ------------------ copy ssh key from $1 to $2 "
-	spawn ssh root@$1 ssh-copy-id $2
+	spawn ssh root@$1 "ssh-copy-id $2"
 	while 1 {
 		expect {
 			"*password*" {
@@ -78,19 +78,25 @@ SE
 }
 
 function generate_ssh_key() {
-	for SERVER in $SERVERS1
+	for ONE_IP in ${TARGET_IPS}
 	do
-		auto_gen_ssh_key $SERVER ${COMM_PASSWD}
+		auto_gen_ssh_key ${ONE_IP} ${COMM_PASSWD}
+	done
+
+	for ONE_IP in ${TARGET_IPS}
+	do
+	# 	不起作用
+	#	get_pub_key ${ONE_IP} ${BASE_SERVER} ${COMM_PASSWD}
 	done
 
 	echo '-----------------------------------------------------'
-
-	for SERVER in $SERVERS1
+	for ONE_IP in ${TARGET_IPS}
 	do
-		get_pub_key $SERVER $BASE_SERVER ${COMM_PASSWD}
-		echo " ----- put $BASE_SERVER --> $SERVER "
-		put_pub_key $BASE_SERVER $SERVER ${COMM_PASSWD}
+		echo " ----- put key from ${BASE_SERVER} =---== to --> ${ONE_IP} "
+		put_pub_key ${BASE_SERVER} ${ONE_IP} ${COMM_PASSWD}
 	done
+
+	
 }
 
 
