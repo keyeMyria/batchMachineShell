@@ -26,8 +26,8 @@ ln -s ${HDP_DIR}-${HDP_VERSION} ${HDP_DIR}
 hown -R hadoop:hadoop /opt/${hadoop}*
 
 cat > /etc/profile.d/hadoop.sh << HP
-	export HADOOP_HOME_HOME=${HDP_DIR}
-	export PATH=${PATH}:${HADOOP_HOME}/bin
+	export HADOOP_HOME=${HDP_DIR}
+	export PATH=\${PATH}:\${HADOOP_HOME}/bin
 HP
 
 source /etc/profile

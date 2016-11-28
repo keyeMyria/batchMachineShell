@@ -55,7 +55,7 @@ chown -R hadoop:hadoop /opt/zookeeper*
 
 cat > /etc/profile.d/zookeeper.sh << HE
 	export ZOOKEEPER_HOME=${ZK_DIR}
-	export PATH=$PATH:$ZOOKEEPER_HOME/bin:$ZOOKEEPER_HOME/conf
+	export PATH=\${PATH}:${ZOOKEEPER_HOME}/bin:${ZOOKEEPER_HOME}/conf
 HE
 
 ips=`ip addr | sed -n '/inet /{s/^.*inet \([0-9.]\+\).*$/\1/;p}'`
